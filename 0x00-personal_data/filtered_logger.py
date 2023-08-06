@@ -5,8 +5,10 @@ import re
 from typing import List
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(
+        fields: List[str], redaction: str, message: str, separator: str
+        ) -> str:
     """filter_datum function """
-    return re.sub(r'({0})[^{1}]*(?={1})'.format(
+    return re.sub(r'({})(?:[^{}]+)'.format(
         '|'.join(map(re.escape, fields)), re.escape(separator)
         ), r'\1' + redaction, message)
