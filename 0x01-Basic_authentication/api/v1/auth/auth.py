@@ -10,10 +10,9 @@ class Auth:
 
         if excluded_paths is None or excluded_paths == [] or path is None:
             return True
-        if path in excluded_paths:
-            return False
+            
         for i in excluded_paths:
-            if i == path+'/':
+            if i == path+'/' or path in excluded_paths:
                 return False
             return True
 
