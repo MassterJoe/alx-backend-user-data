@@ -15,7 +15,7 @@ class Auth:
             return True
 
         for i in excluded_paths:
-            if i == path+'/' or path in excluded_paths:
+            if i == path+'/' or i == path.rstrip('/') or path in excluded_paths:
                 return False
             return True
 
