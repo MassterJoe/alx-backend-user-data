@@ -22,7 +22,7 @@ class Auth:
             elif i == path+'*/' in excluded_paths:
                 return False
             elif i.endswith('*'):
-                if path == i.rstrip('*'):
+                if path == i[:2]:
                     return True
             return True
 
