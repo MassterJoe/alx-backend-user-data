@@ -65,7 +65,7 @@ class BasicAuth(Auth):
             decoded_base64_authorization_header
         ) is str:
             if ':' in decoded_base64_authorization_header:
-                email, pas = decoded_base64_authorization_header.split(':')
+                email, pas = decoded_base64_authorization_header.split(':', 1)
                 return email, pas
             else:
                 return None, None
