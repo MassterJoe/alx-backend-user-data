@@ -6,6 +6,8 @@ from api.v1.auth.auth import Auth
 import base64
 from typing import Tuple, TypeVar
 from models.user import User
+from flask import request
+import binascii
 
 
 class BasicAuth(Auth):
@@ -43,9 +45,11 @@ class BasicAuth(Auth):
         if type(base64_authorization_header) is str:
             try:
                 decoded_str = base64.b64decode(
-                    base64_authorization_header).decode('utf-8')
-                return decoded_str
-            except base64.binascii.Error:
+                                    base64_authorization_header,
+                                    validate=True)
+                decode_ut = decoded_str.decode('utf-8')
+                return decode_ut
+            except (binascii.Error, UnicodeDecodeError):
                 return None
         else:
             return None
@@ -86,3 +90,11 @@ class BasicAuth(Auth):
                 return None
         else:
             return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """ overloads Auth and retrieves the User instance for a request"""
+        user_header = self.authorization_header(request)
+        token = self.extract_base64_authorization_header(user_header)
+        decode = self.decode_base64_authorization_header(token)
+        email, password = self.extract_user_credentials(decode)
+        return self.user_object_from_credentials(email, password)
