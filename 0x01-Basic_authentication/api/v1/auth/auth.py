@@ -23,7 +23,7 @@ class Auth:
                 return False
             elif i.endswith('*'):
                 if path == i.rstrip('*'):
-                    return False
+                    return True
             return True
 
     def authorization_header(self, request=None) -> str:
