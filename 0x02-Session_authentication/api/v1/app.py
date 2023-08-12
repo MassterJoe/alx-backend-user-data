@@ -16,35 +16,12 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
-auth_type = getenv('AUTH_TYPE', 'auth')
-if auth_type == 'basic_auth':
+if getenv('AUTH_TYPE') == 'basic_auth':
     auth = BasicAuth()
-elif auth_type == 'session_auth':
+elif getenv('AUTH_TYPE') == 'session_auth':
     auth = SessionAuth()
-else:
+elif getenv('AUTH_TYPE') == 'auth':
     auth = Auth()
-
-
-@app.before_request
-def before_request() -> str:
-    """ befor request """
-    if auth is None:
-        return
-
-    excluded_paths = [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/',
-        '/api/v1/forbidden/',
-        '/api/v1/auth_session/login/',
-    ]
-
-    if auth.require_auth(request.path, excluded_paths):
-        if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
-            abort(401)
-        if auth.current_user(request) is None:
-            abort(403)
-
-    request.current_user = auth.current_user(request)
 
 
 @app.errorhandler(401)
@@ -64,6 +41,30 @@ def not_found(error) -> str:
 def forbidden(error) -> str:
     """ Forbidden error handler"""
     return jsonify({"error": "Forbidden"}), 403
+
+
+@app.before_request
+def before_request() -> str:
+    """ befor request """
+    if auth is None:
+        return
+
+    excluded_paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/'
+    ]
+
+    if auth.require_auth(request.path, excluded_paths):
+        if auth.authorization_header(
+                request
+                ) is None and auth.session_cookie(request) is None:
+            abort(401)
+        if auth.current_user(request) is None:
+            abort(403)
+
+    request.current_user = auth.current_user(request)
 
 
 if __name__ == "__main__":

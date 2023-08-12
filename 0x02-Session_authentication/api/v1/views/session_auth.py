@@ -9,6 +9,7 @@ from models.user import User
 import os
 
 
+@app_views.route('api/v1/auth_session/login', methods=['POST'], strict_slashes=False)
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """ Login route handler"""
@@ -24,8 +25,9 @@ def login() -> str:
     if not users[0].is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
     from api.v1.app import auth
+    user = User()
     session_id = auth.create_session(user.id)
-    cookie_name = os.environ.get('SESSION_NAME')
+    cookie_name = os.getenv('SESSION_NAME')
     response = jsonify(user.to_json())
     response.set_cookie(cookie_name, session_id)
     return response
