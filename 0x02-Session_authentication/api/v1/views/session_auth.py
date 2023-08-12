@@ -9,7 +9,6 @@ from models.user import User
 import os
 
 
-@app_views.route('api/v1/auth_session/login', methods=['POST'], strict_slashes=False)
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """ Login route handler"""
