@@ -5,7 +5,6 @@ single GET route ("/")
 """
 from flask import Flask, jsonify, request, abort
 from auth import Auth
-from sqlalchemy.orm.exc import NoResultFound
 
 
 app = Flask(__name__)
@@ -32,7 +31,7 @@ def users():
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'])
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """ login"""
     email = request.form.get('email')
