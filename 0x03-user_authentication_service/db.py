@@ -35,14 +35,14 @@ class DB:
         """ add_user method, which has two required string
         arguments: email and hashed_password
         """
-        new_user = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
         self._session.commit()
-        return new_user
+        return user
 
-    def find_user_by (self, **kwargs) -> User:
-        """ This method takes in arbitrary keyword arguments and 
-        returns the first row found in the users table as filtered 
+    def find_user_by(self, **kwargs) -> User:
+        """ This method takes in arbitrary keyword arguments and
+        returns the first row found in the users table as filtered
         by the methods input arguments."""
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
