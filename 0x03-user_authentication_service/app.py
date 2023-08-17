@@ -33,7 +33,7 @@ def users():
 
 
 @app.route('/sessions', methods=['POST'])
-def login():
+def login() -> str:
     """ login"""
     email = request.form.get('email')
     password = request.form.get('password')
