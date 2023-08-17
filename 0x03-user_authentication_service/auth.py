@@ -60,8 +60,10 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> Union[None, str]:
-        """ It takes an email string argument
-        returns the session ID as a string."""
+        """It finds the user corresponding to the email
+        takes an email string argument
+        returns the session ID as a string
+        """
         try:
             user = self._db.find_user_by(email=email)
             session_id = _generate_uuid()
