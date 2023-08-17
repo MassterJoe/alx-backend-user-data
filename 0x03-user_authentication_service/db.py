@@ -57,7 +57,7 @@ class DB:
         a required user_id integer and arbitrary keyword arguments,
         and returns None."""
         try:
-            user = User.find_user_by(id=user_id)
+            user = self.find_user_by(id=user_id)
             for key in kwargs.keys():
                 if not hasattr(user, key):
                     raise ValueError()
