@@ -49,12 +49,15 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout():
+def logout() -> str:
     """ logout """
     session_id = request.cookies.get('session_id')
-    if session_id in sessions:
-        del sessions[session_id]
-        return redirect("/", code=302)
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        AUTH.destroy_session(user.id)
+        response = jsonify({'message': 'logout successful'})
+        response.delete_cookie('session_id')
+        return redirect('/', code=302)
     else:
         abort(403)
 
