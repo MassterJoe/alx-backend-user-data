@@ -83,3 +83,10 @@ class Auth:
         except NoResultFound:
             return None
         return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """ The method takes a single user_id integer
+        argument and returns None."""
+        if user_id is None:
+            return None
+        return self._id.update_user(user_id, session_id=None)
