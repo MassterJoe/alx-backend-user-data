@@ -5,10 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from user import User, Base
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
-
-from user import Base, User
 
 
 class DB:
@@ -33,7 +32,8 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Adds a new user to the db
+        """ add_user method, which has two required string
+        arguments: email and hashed_password
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
@@ -41,8 +41,9 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
-        """Find the first user that matches the given filter arguments
-        """
+        """ This method takes in arbitrary keyword arguments and
+        returns the first row found in the users table as filtered
+        by the methods input arguments."""
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
             return user
